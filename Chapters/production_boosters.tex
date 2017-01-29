@@ -13,8 +13,8 @@
 \begin{itemize}
     \item 使用模版文件的模版
     \item 使用缩写的模版
-    \item 使用已知单词与 tag list 的自动补全
-    \item 使用 omnicompletion 的自动补全
+    \item 使用已知单词与 Tag List 的自动补全
+    \item 使用 Omnicompletion 的自动补全
     \item 宏与宏录制
     \item 使用会话
     \item 使用会话的项目管理
@@ -196,8 +196,9 @@ endfunction
 :autocmd BufNewFile * silent! call LoadTemplate('%:e')
 \end{vimcode}
 函数 \texttt{LoadTemplate} 在 \texttt{\$VIMHOME} 的 \texttt{templates} 子目录
-下搜索两个文件: \texttt{EXTENSION.tpl} 与 \texttt{EXTENSION.patterns.tpl},
-其中 \texttt{EXTENSION} 表示当前打开着的文件的扩展名.
+下搜索两个文件: \textit{extension}\texttt{.tpl} 与 \textit{extension}
+\path{.patterns.tpl},
+其中 \textit{extension} 表示当前打开着的文件的扩展名.
 \marginpar{78}
 第 1 个文件包含了特定文件类型的模版, 而第 2 个文件则包含了特定文件类型的缩写
 命令. 如果没有找到对应的文件, 那么命令 \texttt{silent!} 就会抑制错误信息的输
@@ -217,16 +218,16 @@ endfunction
 
 虽然已经有大量的模版系统脚本可供使用, 而且它们中的大部分都是以本章介绍的概念
 为基础, 但是有时候对于特定的文件格式, Vim 还是没有提供足够的支持. 对于这些情况,
-用户可以使用 snippet 脚本. Snippet 和用在模版中的缩写有点类似, 但是要更高级一
+用户可以使用代码片断脚本.代码片断和用在模版中的缩写有点类似, 但是要更高级一
 点.
 
-如果读者想在 Vim 中使用 snippet, 笔者推荐 snipMate 脚本, 下载地址是
+如果读者想在 Vim 中使用代码片断, 笔者推荐 snipMate 脚本, 下载地址是
 \url{http://www.vim.org/scripts/script.php?script_id=2540}.
 
 snipMate 可以让用户在不需要了解 Vim 脚本的前提下, 为自己的文件格式定义高级的
-snippet.
+代码片断.
 
-假设用户想为 \texttt{for} 循环创建一个 snippet (在前面的一节里用的是
+假设用户想为 \texttt{for} 循环创建一个代码片断 (在前面的一节里用的是
 \texttt{iabbrev}),  那就这样做:
 \begin{vimcode}
 snippet for
@@ -239,35 +240,33 @@ snippet for
 表示文件类型,
 比如 C 代码就写成 \texttt{c.snippet}, PHP 代码就写成 \texttt{php.snippet}).
 \marginpar{79}
-脚本的第一行表示开始一个新的 snippet, 当输入 \texttt{for} 并且后面再紧跟着一个
-\key{Tab} 键时, 执行 snippet 脚本.
+脚本的第一行表示开始一个新的代码片断, 当输入 \texttt{for} 并且后面再紧跟着一个
+\key{Tab} 键时, 执行代码片断脚本.
 
-再接下来的一行是最神奇的, 脚本实际生成的代码看起来就像:
-% FIXME
+再接下来的一行是最神奇的, 脚本实际生成的代码就像:
 \begin{vimcode}
-    for (i = 0; I < count; i++) {
+    for (i = 0; i < count; i++) {
         /* code */
     }
 \end{vimcode}
 
-snippet 被插入之后, 它把光标放在了第 1 个 \texttt{i} 的位置, 并切换到插入
+代码片断被插入之后, 它把光标放在了第 1 个 \texttt{i} 的位置, 并切换到插入
 模式, 可以轻易地把 \texttt{i} 换成另一个变量. 现在, 最神奇的事情发生了,
-% FIXME
 第 1 个 \texttt{i} 被换掉之后, 第 2 个 \texttt{i} (后面带有 \texttt{++}
-的那个) 也会被自动更新成新变量. 修改了 \texttt{i} 之后 (如果需要的话), 按下
+的那个) 也会自动更新成新变量. 修改了 \texttt{i} 之后 (如果需要的话), 按下
 \key{Tab} 键, 光标就会跳转到 \texttt{count}, 并再次切换到插入模式. 现在你可以
 以同样的步骤修改 \texttt{count} 并按下 \key{Tab} 键, 之后, 光标跳转到
 \texttt{++}, 再按下 \key{Tab} 跳到 \texttt{/* code */}, 你可以在这里写下其他代
 码.
 
-在 snippet 的不同变量之间跳转, 简直不能再简单了.
+在代码片断的不同变量之间跳转, 简直不能再简单了.
 
 snipMate 系统通过查找由 \texttt{\$\{NUMBER:INITIAL\_VALUE\}} 创建的特殊标记进行
 工作. 标记中的 \texttt{NUMBER} 指出了按下 \key{Tab} 时, 将要跳转到的序列.
 如果 \texttt{NUMBER} 是 1, 那么光标会首先处在这个位置上, 如果 \texttt{NUMBER}
 是 3, 那么它就是按下两次 \key{Tab} 后光标所在的位置, 以此类推.
-\texttt{INITIAL\_VALUE} 是在修改 snippet 之前, 首先插入到 snippet 中的文本.
-比如 \texttt{\$\{1:i\}} 把 \texttt{i} 作为文本插入到 snippet 中, 并首先把光标
+\texttt{INITIAL\_VALUE} 是在修改代码片断之前, 首先插入到代码中的文本.
+比如 \texttt{\$\{1:i\}} 把 \texttt{i} 作为文本插入到代码中, 并首先把光标
 放在此处.
 
 如果需要在多个地方使用同一个变量, 可以通过 \texttt{\$NUMBER} 来引用. 比如说,
@@ -275,11 +274,11 @@ snipMate 系统通过查找由 \texttt{\$\{NUMBER:INITIAL\_VALUE\}} 创建的特
 \texttt{\$1} 即可. 写上 \texttt{\$1} 所有地方在开始时都会显示成 \texttt{i},
 当改变 \texttt{i} 时, 其他地方的 \texttt{i} 也会自动更新.
 
-这里介绍的只是创建 snippet 的基础知识, 不过一旦在系统中安装了 snipMate,
+这里介绍的只是创建代码片断的基础知识, 不过一旦在系统中安装了 snipMate,
 就可以通过 Vim 的帮助系统学习到更多的高级知识.
 
 还可以在 snipMate 中找到更多的惊喜. 用户会发现, snipMate 已经为许多常见
-的文件格式准备好了 snippet 脚本, 包括 \texttt{.c}, \texttt{.php},
+的文件格式准备好了代码片断脚本, 包括 \texttt{.c}, \texttt{.php},
 \texttt{.perl}, \texttt{.java}, \texttt{.html}, \texttt{.tex}, 甚至还包括 Vim
 脚本.
 \marginpar{80}
@@ -292,9 +291,9 @@ snipMate 系统通过查找由 \texttt{\$\{NUMBER:INITIAL\_VALUE\}} 创建的特
 \section{Tag List}
 \label{sec:using_tag_list}
 
-Tag list 就像是程序员的字典. Tag list 实际上是一个包含了所有种类的关键词的文件,
+Tag List 就像是程序员的字典. Tag List 实际上是一个包含了所有种类的关键词的文件,
 这些关键词可以用来识别程序的各个要素, 包括函数名, 变量名, 类的方法, 具体的要素
-依赖于编程语言. Tag list 文件并非由 Vim 生成, 而是 tag list 生成程序. Tag list
+依赖于编程语言. Tag List 文件并非由 Vim 生成, 而是 Tag List 生成程序. Tag List
 生成程序有很多种, 比较常见的有:
 \begin{itemize}
     \item Exuberant Ctags: 用于 C, C++, Java, Perl, Python, Vim, Ruby (以及其
@@ -306,7 +305,7 @@ Tag list 就像是程序员的字典. Tag list 实际上是一个包含了所有
 \end{itemize}
 
 因为 Exuberant Ctags (简称 Ctags) 使用得最为广泛, 支持的语言也是最多的, 因此
-在下面的例子里我们用它生成 tag list.
+在下面的例子里我们用它生成 Tag List.
 
 以一个小项目进行讲解, 这个项目包含了 3 个 C 文件:
 \begin{itemize}
@@ -314,14 +313,14 @@ Tag list 就像是程序员的字典. Tag list 实际上是一个包含了所有
     \item \texttt{myfunctions.c}: 包含了程序中用到的各个函数
     \item \texttt{myfunctions.h}: \texttt{myfunctions.c} 中的函数的头文件
 \end{itemize}
-假设代码已经写完, 现在为这些代码文件生成一个 tag list 文件.
+假设代码已经写完, 现在为这些代码文件生成一个 Tag List 文件.
 
 在存放源代码文件的目录下执行命令:
 \begin{vimcode}
 ctags *.c *.h
 \end{vimcode}
 命令执行完毕后, 会在当前目录下创建一个新文件, 文件名是 \texttt{tags}.
-这个文件就是 tag list 文件, 它包含了源代码中所有函数与变量的信息.
+这个文件就是 Tag List 文件, 它包含了源代码中所有函数与变量的信息.
 \marginpar{81}
 \begin{warning}
     \texttt{ctags} 命令提供了大量的参数, 用于指定编程语言, 更多的信息可以通过
@@ -390,11 +389,11 @@ myvalue = calcValue(
     \item \texttt{:tprev}: 移动到列表中的前一个 tag
 \end{itemize}
 
-用户可能还没有从前面的例子中体会到 tag list 的强大之外, 想像一下, 假设项目中的
+用户可能还没有从前面的例子中体会到 Tag List 的强大之外, 想像一下, 假设项目中的
 文件不只 3 个, 而是散布在数百个目录中的上千个文件, 这时候, 用户肯定没办法记住
-每个函数所在的位置, 这时候就非常需要一个强大的索引工具, 就像 tag list.
+每个函数所在的位置, 这时候就非常需要一个强大的索引工具, 就像 Tag List.
 \marginpar{83}
-\subsection{更便捷的 taglist 导航}
+\subsection{更便捷的 Tag List 导航}
 \label{subsec:easier_taglist_navigation}
 
 在大多数的非英文键盘布局中, 按键 \texttt{]} 无法直接使用, 必须通过其他的组合
@@ -410,11 +409,11 @@ myvalue = calcValue(
 现在, 用户可以用 \key{F7} 与 \key{Ctrl+F7} 在 tag 间跳转, 用 \key{Alt+F7}
 获取 tag 列表, 用 \key{F8} 与 \key{Ctrl+F8} 遍历 tag.
 
-\subsection{taglist 的其他用法}
+\subsection{Tag List 的其他用法}
 \label{subsec:other_usages_of_taglists}
 
 Taglist 不仅可以用来查找函数与变量的定义, 还可以用来查找其他信息. 笔者在这里只
-是简单地提一下 taglist 在 Vim 中的其他应用:
+是简单地提一下 Tag List 在 Vim 中的其他应用:
 \begin{itemize}
     \item \texttt{lookupfile.vim}: 由 Hari Krishna Dara 开发, 该脚本使用 tag
         list 在一个预处理过的项目中查找指定的文件, 脚本的最新版见
@@ -517,18 +516,18 @@ Taglist 不仅可以用来查找函数与变量的定义, 还可以用来查找�
 
 其他的将会在下节介绍.
 
-\subsection{omnicompletion}
+\subsection{Omnicompletion}
 \label{subsec:omnicompletion}
 
 哪些内容应该自动补全, 哪些内容不应该自动补全 --- 对此我们都有完美的解决办法.
 但是对于 Vim 来说, 在 7.0 版出现之前, 用户对补全并没有绝对的控制权.
 
-Vim 7.0 引入了一种全新的补全技术 --- omnicompletion. 它使得用户可以精确地定义
+Vim 7.0 引入了一种全新的补全技术 --- Omnicompletion. 它使得用户可以精确地定义
 补全功能应该如何工作. 实际上, 用户需要自己来编写补全函数 (除非已经有人把函数
 写好了).
 \marginpar{87}
 和前一节介绍的一样, 激活补全的方法是先输入几个字母, 按下 \key{Ctrl+x} 进入到
-补全模式, 再紧接着按下 \key{Ctrl+o} 使用 omnicompletion.
+补全模式, 再紧接着按下 \key{Ctrl+o} 使用 Omnicompletion.
 
 为了添加用户自定义的补全函数, 执行:
 \begin{vimcode}
@@ -584,7 +583,7 @@ function! CompleteEmails(findstart, base)
 	endfunction
 \end{vimcode}
 
-函数接收两个参数 --- 所有的 omnicompletion 函数都是如此. Vim 第一次调用函数时,
+函数接收两个参数 --- 所有的 Omnicompletion 函数都是如此. Vim 第一次调用函数时,
 把第 1 个参数 \texttt{findstart} 设置为 1 (\texttt{base} 为空). 这样的参数状态
 表示这是第一次调用, 函数应该搜索用户当前所写的单词的开始.
 
@@ -598,9 +597,9 @@ function! CompleteEmails(findstart, base)
 地址来完成, 而是要通过构建一个字典 (见 \texttt{:help Dictionary}), 在构建字典
 时会接触到一些特定的关键词. 在这个案例中使用下列三个关键词:
 \begin{itemize}
-    \item Word: 应该插入的真正的单词
-    \item Abbr: 在弹出列表中使用的单词, 而非直接使用 word
-    \item Icase: 如果其值非零, 则匹配是区分大小写的
+    \item \texttt{word}: 应该插入的真正的单词
+    \item \texttt{abbr}: 在弹出列表中使用的单词, 而非直接使用 \texttt{word}
+    \item \texttt{icase}: 如果其值非零, 则匹配是区分大小写的
 \end{itemize}
 
 其他的关键词及其意义可以在 Vim 的帮助系统中找到:
@@ -642,7 +641,7 @@ function! CompleteEmails(findstart, base)
 借用帮助系统中的 \texttt{CleverTab} 函数, 并对它加以扩展, 使得它可以从下
 面的, 带有优先级的列表中选择补全方法:
 \begin{itemize}
-    \item omnicompletion
+    \item Omnicompletion
     \item 字典补全
     \item 已知单词的补全
 \end{itemize}
@@ -677,7 +676,7 @@ inoremap <Tab> <C-R>=SuperCleverTab()<cr>
 完成各种类型的补全.
 
 按下 \key{Tab} 键进行补全时, 函数检查此时是否是要插入一个制表符. 如果不是, 那
-就检查 omnicompletion 函数 (通过 \texttt{omnifunc} 设置) 是否可用. 如果函数不
+就检查 Omnicompletion 函数 (通过 \texttt{omnifunc} 设置) 是否可用. 如果函数不
 可用, 那就检查字典是否可用. 如果字典还是不可用, 那就使用最简单的已知单词补全.
 
 \section{宏录制}
@@ -1818,7 +1817,7 @@ set bufhidden=hide
 
 首先是介绍了如何利用模版来降低文本输入的工作量. 最开始是使用缩写来插入模版,
 然后, 是根据不同的文件类型来制作并插入对应的模版文本. 最后, 讨论如何使用
-snipMate 脚本来为任意的文件格式制作高级 snippet.
+snipMate 脚本来为任意的文件格式制作代码片断脚本.
 
 接着是自动补全. 我们介绍了各种不同的补全方法, 还说明了如何把众多补全方法都绑
 定到 \key{Tab} 键上.
